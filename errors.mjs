@@ -15,6 +15,12 @@ export class NotFoundError extends BaseError {
     }
 }
 
+export class MissingValueError extends BaseError {
+    constructor(message = 'Value is missing', statusCode = 501) {
+        super('MissingValueError', message, statusCode);
+    }
+}
+
 export class AuthError extends BaseError {
     constructor(message = 'Unauthorized', statusCode = 401) {
         super('AuthError', message, statusCode);
@@ -30,6 +36,12 @@ export class SystemError extends BaseError {
 export class NotAllowedError extends BaseError {
     constructor(message = 'Not Allowed', statusCode = 403) {
         super('NotAllowedError', message, statusCode);
+    }
+}
+
+export class BadFormatError extends BaseError {
+    constructor(message = 'Bad format', statusCode = 400) {
+        super('BadFormatError', message, statusCode);
     }
 }
 

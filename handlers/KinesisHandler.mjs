@@ -15,4 +15,8 @@ export class KinesistHandler extends InputHandler {
         this._payload = input;
         this._format = "json";
     }
+
+    shortInputLog(input) {
+        return ('NOTE: FORMAT SHORT LOG FORMAT', JSON.stringify(input));
+    }
 }

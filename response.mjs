@@ -25,6 +25,32 @@ export class ResponseCSV extends Response {
         super(data, 'text/csv');
     }
 }
+export class ResponseJSON2CSV extends Response {
+    static json2CSV(list) {
+        if (!Array.isArray(list) || list.length === 0) {
+            return '';
+        }
+        const csv = [Object.keys(list[0]).join(",")];
+        for (const item of list) {
+            csv.push(Object.values(item).map(value => {
+                if (typeof value === 'string') {
+                    if (value.includes(",") || value.includes('"')) {
+                        return `"${value.replace(/"/g, '""')}"`; // escape double quotes
+                    }
+                    return value;
+                } else if (!isNaN (value)) {
+                    return value; // keep numbers as is
+                } else {
+                    return value;
+                }
+            }).join(","));
+        }
+        return csv.join("\n");
+    }
+    constructor(data) {
+        super(ResponseJSON2CSV.json2CSV(data), 'text/csv');
+    }
+}
 
 export class ResponseText extends Response {
     constructor(data) {

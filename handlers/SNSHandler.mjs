@@ -2,20 +2,24 @@ import { InputHandler } from "./inputHandler.mjs";
 
 export class SNSHandler extends InputHandler {
     static isSNS(input) {
-        console.log ("Not yet implemented SNSHandler.isSNS");
-        return false;
-        if (input?.Name !== "ContactFlowEvent") return false
-        if (!input.Details) return false
-        if (!input.Details.ContactData) return false
-        return true;
+        return input.Records[0]?.EventSource === "aws:sns";
     }
+
     static identifier = '__sns__';
     constructor(input) {
         super('sns');
         this._path = SNSHandler.identifier;
         this._method = "post";
-        this._params = null;
-        this._payload = input;
+        this._params = {};
+        this._payload = this.#distill(input);
         this._format = "json";
+    }
+
+    shortInputLog(input) {
+        return ('NOTE: FORMAT SHORT LOG FORMAT', JSON.stringify(input));
+    }
+
+    #distill(input) {
+        return input.Records.map(record => JSON.parse(record.Sns.Message) || record.Sns.Message);
     }
 }

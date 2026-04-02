@@ -2,7 +2,7 @@ import { InputHandler } from "./inputHandler.mjs";
 
 export class S3Handler extends InputHandler {
     static isS3(input) {
-        console.log ("Not yet implemented S3Handler.isS3");
+        console.log("Not yet implemented S3Handler.isS3");
         return false;
         if (input?.Name !== "ContactFlowEvent") return false
         if (!input.Details) return false
@@ -17,5 +17,9 @@ export class S3Handler extends InputHandler {
         this._params = null;
         this._payload = input;
         this._format = "json";
+    }
+
+    shortInputLog(input) {
+        return ('NOTE: FORMAT SHORT LOG FORMAT', JSON.stringify(input));
     }
 }

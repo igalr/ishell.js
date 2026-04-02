@@ -3,13 +3,15 @@ import { APIInterface } from './API.mjs';
 export default class OpenAPI {
     #api;
     #path;
+    #hparams;
     #title;
     #version;
 
-    constructor(api, title, version, path = '/') {
+    constructor(api, title, version, path = '/', hparams = {}) {
         this.#api = api;
         if (!path.startsWith('/')) path = '/' + path;
         this.#path = path;
+        this.#hparams = hparams;
         this.#title = title || 'API Documentation';
         this.#version = version || '1.0.0';
     }
@@ -31,16 +33,17 @@ export default class OpenAPI {
                 }
             }
         };
-        json.paths = await this.#generatePaths(this.#api, this.#path);
+        json.paths = await this.#generatePaths(this.#api, this.#path, this.#hparams);
         json.tags = await this.#generateTags(this.#api, this.#path);
         return json;
     }
 
-    async #generatePaths(node, root, hparams = {}, tag = null) {
+    async #generatePaths(node, root, hparams, tag = null) {
         let paths = {};
         let localHparams = { ...hparams };
         for (const key of Object.keys(node)) {
-            const schema = node[key];
+            let schema = node[key];
+            schema = { ...schema, ...hparams };
             const d = await this.#generatePaths(new APIInterface({ [key]: schema }), root, localHparams, tag);
             for (const [p, details] of Object.entries(d)) {
                 paths[p] = details;
@@ -56,7 +59,7 @@ export default class OpenAPI {
                 params.push({
                     name: paramName,
                     in: paramDetails.in || 'path',
-                    required: true,
+                    required: paramDetails.required || false,
                     schema: { type: paramDetails.type || 'string' },
                     description: paramDetails.description || ''
                 });
@@ -114,6 +117,11 @@ export default class OpenAPI {
                 }
 
                 let inner = await this.#generatePaths(await value.action(prms), path, localHparams, value.tag);
+                if (value.params) {
+                    for (const [paramName, paramDetails] of Object.entries(value.params)) {
+                        delete localHparams[paramName];
+                    }
+                }
 
                 for (const [subPath, subDetails] of Object.entries(inner || {})) {
                     paths[subPath] = subDetails;

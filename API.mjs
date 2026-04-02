@@ -1,6 +1,6 @@
 import { ResponseJSON } from './response.mjs';
 import OpenAPI from './OpenAPI.mjs';
-import { NotFoundError } from './errors.mjs';
+import { AuthError, NotFoundError } from './errors.mjs';
 
 export class APIInterface {
     #schema; get schema() { return this.#schema; }
@@ -8,22 +8,20 @@ export class APIInterface {
     #version;
 
     constructor(schema = {}, title = "API Documentation", version = "Unknown") {
-        this.#schema = schema;
+        this.#schema = this.#restrictSchema(schema);
         this.#title = `${title} (${process.env.AWS_LAMBDA_FUNCTION_NAME || "Local"})`;
         this.#version = version;
-
-        this.#restrictAPI();
     }
 
     get isAPIInterface() { return true; }
 
     async execute(path, params, methods, body, headers = {}) {
         if (!Array.isArray(path)) path = [path];
-        const pathinit = path? path.join('/') : '';
+        const pathinit = path ? path.join('/') : '';
         try {
             const node = await this.exrec(path, params, methods, body, headers) || {};
             if (node?.isAPIInterface === true) {
-                const d = await node.usage(pathinit);
+                const d = await node.usage(pathinit, this.schema[pathinit].params);
                 return d;
             }
             return node;
@@ -52,8 +50,8 @@ export class APIInterface {
         return node;
     }
 
-    async usage(path) {
-        const d = await (new OpenAPI(this, this.#title, this.#version, path)).json();
+    async usage(path, params = {}) {
+        const d = await (new OpenAPI(this, this.#title, this.#version, path, params)).json();
         return new ResponseJSON(d);
     }
 
@@ -78,16 +76,26 @@ export class APIInterface {
         }
     }
 
-    #restrictAPI() {
+    #restrictSchema(schema) {
         const allowList = process.env.ALLOW_API?.split(",").map(s => s.trim()) || null;
         const denyList = process.env.DENY_API?.split(",").map(s => s.trim()) || [];
-        for (const key of Object.keys(this.#schema)) {
-            if (this.#schema[key].api && this.#schema[key].toplevel) {
+        if (denyList[0]?.toLowerCase() === "all") return {};    // if all is denied return empty schema
+        for (const key of Object.keys(schema)) {
+            if (schema[key].api && schema[key].toplevel) {
                 if ((allowList && allowList.indexOf(key) < 0) || denyList.indexOf(key) >= 0) {
-                    delete this.#schema[key];
+                    delete schema[key];
                 }
             }
         }
-        console.log("Available APIs", Object.keys(this.#schema));
+        return schema;
+    }
+
+    confirmAPIKey(headers, apiKey) {
+        if (apiKey) {
+            const provided = headers['x-api-key'];
+            if (!provided || provided !== apiKey) {
+                throw new AuthError('Invalid or missing API key');
+            }
+        }
     }
 }

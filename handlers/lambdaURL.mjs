@@ -15,16 +15,16 @@ export class LambdaURLHandler extends InputHandler {
         super._method = input.requestContext?.http?.method;
         super._params = input.queryStringParameters || {};
 
-        super._payload = input.body;
+        this._payload = input.body;
         try {
-            super._payload = JSON.parse(super._payload);
+            this._payload = JSON.parse(this._payload);
         } catch (e) {
             // console.log('error', e.message);
         }
 
-        console.log('input', JSON.stringify(input));
+        // console.log('input', JSON.stringify(input));
         let path = input.requestContext?.http?.path;
-        console.log('path', path, input.requestContext?.http?.path);
+        // console.log('path', path, input.requestContext?.http?.path);
         if (path[0] === '/') path = path.substring(1);
         const pos = path.lastIndexOf('.');
         if (pos > 0) {
@@ -37,8 +37,21 @@ export class LambdaURLHandler extends InputHandler {
         super._headers = input.headers || {};
     }
 
+    shortInputLog(input) {
+        return ("LambdaURL request", JSON.stringify({
+            path: input.requestContext?.http?.path || input.raw.path,
+            method: input.requestContext?.http?.method,
+            params: input.queryStringParameters,
+            sourceIp: input.requestContext?.http?.sourceIp
+        }));
+    }
+
     processResponse(response, headers = {}) {
-        headers["Content-Type"] = response.contentType;
+        headers = {
+            ...headers,
+            "Content-Type": response.contentType,
+            "Access-Control-Allow-Origin": "*", // allow all domains
+        };
         const body = response.contentType === 'application/json' ? JSON.stringify(response.content) : response.content;
         return {
             statusCode: response.returnCode,

@@ -3,7 +3,7 @@ import { APIInterface } from "./API.mjs";
 import { handleLambdaTrigger } from "./lambdaHandler.mjs";
 
 export class LambdaSimulatorAPI extends APIInterface {
-    constructor(api, version = "unknown") {
+    constructor(api, version='unknown') {
         super({
             simulate: {
                 method: 'post',

@@ -41,6 +41,10 @@ export class AmazonConnectHandler extends InputHandler {
 
     get attributes() { return this._payload; }
 
+    shortInputLog(input) {
+        return ('NOTE: FORMAT SHORT LOG FORMAT', JSON.stringify(input));
+    }
+
     processResponse(response, headers = {}) {
         let body = response.content;
         body.lambdaResult = 'Success';

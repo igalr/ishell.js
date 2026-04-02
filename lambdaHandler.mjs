@@ -1,27 +1,29 @@
 import { handlers } from "./handlers/handlers.mjs";
-import { AuthError, BaseError } from "./errors.mjs";
+import { BaseError } from "./errors.mjs";
 import fs from 'fs';
 import mime from 'mime-types';
-import { type } from "os";
 
 export const handleLambdaTrigger = async (input, target) => {
     let handler = handlers.matchHandler(input);
     if (!handler) {
+        console.error ("No handler found for input");
+        console.log("INPUT", JSON.stringify(input));
         return {
             statusCode: 400,
             body: 'Input not recognized'
         };
     }
 
-    console.log({handler: handler.type, path: handler.path});
-
-    let headers = {};
-    if (handler.method === 'options') {
+    let headers = {
+        "Access-Control-Allow-Origin": "*", // allow all domains
+    };
+    if (handler.method.toLowerCase() === 'options') {
         headers = {
-            "Access-Control-Allow-Origin": "*", // allow all domains
-            "Access-Control-Allow-Methods": "GET,POST",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": input.headers['access-control-request-method'],
             "Access-Control-Allow-Headers": input.headers['access-control-request-headers']
         }
+        console.log ('CORS request service');
         return {
             statusCode: 200,
             headers: headers
@@ -46,14 +48,15 @@ export const handleLambdaTrigger = async (input, target) => {
             contentType = 'text/html';
         }
         filename = process.cwd() + '/swagger/' + filename;
-        console.log('Filename', filename);
         const data = fs.readFileSync(filename);
-        console.log('file', data.length);
+        console.log('Docs file', filename, data.length);
         return {
             statusCode: 200,
             headers: {
                 ...headers,
-                "Content-Type": contentType
+                "Content-Type": contentType,
+                "Access-Control-Allow-Origin": "*"
+
             },
             body: data.toString()
         };
@@ -62,9 +65,15 @@ export const handleLambdaTrigger = async (input, target) => {
     const requestHeaders = { ...handler.headers, '_handler_type': handler.type };
 
     try {
+        if (process.env.AWS_LOG_IO === 'true') {
+            console.log("INPUT", JSON.stringify(input));
+        } else {
+            console.log (handler.shortInputLog(input));
+        }
         const response = await target.execute(path, handler.params, handler.method, handler.payload, requestHeaders);
         return handler.processResponse(response, headers);
     } catch (err) {
+        console.log("INPUT", JSON.stringify(input));
         if (err instanceof BaseError) {
             return {
                 statusCode: err.statusCode,

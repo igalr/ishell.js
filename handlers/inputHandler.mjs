@@ -16,6 +16,12 @@ export class InputHandler {
     processResponse(response, headers = {}) {
         return response;
     }
+    
+    shortInputLog(input) {
+        let s = JSON.stringify(input);
+        if (s.length > 100) s = s.substring(0, 100) + '...';
+        return s;
+    }
 
     get json() {
         return {
