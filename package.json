@@ -1,0 +1,24 @@
+{
+  "name": "ishell.js",
+  "version": "1.2.1",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "vite": "vite",
+    "dev": "PORT=5173 nodemon src/local.mjs",
+    "start": "PORT=5173 node src/local.mjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mime-types": "^3.0.2",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11",
+    "vite": "^7.3.1"
+  }
+}
