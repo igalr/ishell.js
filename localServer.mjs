@@ -1,9 +1,9 @@
-import express from 'express';
 import cors from 'cors';
-import path from 'path';
-import { ResponseJSON } from './response.mjs';
-import { AuthError, BaseError } from './errors.mjs';
 import dotenv from 'dotenv';
+import express from 'express';
+import path from 'path';
+import { BaseError } from './errors.mjs';
+import { ResponseJSON } from './response.mjs';
 
 export const localServer = (target) => {
     const app = express();
