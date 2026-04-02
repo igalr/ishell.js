@@ -47,7 +47,7 @@ export const handleLambdaTrigger = async (input, target) => {
             filename = 'index.html';
             contentType = 'text/html';
         }
-        filename = process.cwd() + '/swagger/' + filename;
+        filename = process.cwd() + '/node_modules/ishell.js/swagger/' + filename;
         const data = fs.readFileSync(filename);
         console.log('Docs file', filename, data.length);
         return {
