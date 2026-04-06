@@ -55,8 +55,8 @@ export const handleLambdaTrigger = async (input, target) => {
             headers: {
                 ...headers,
                 "Content-Type": contentType,
-                "Access-Control-Allow-Origin": "*"
-
+                "Access-Control-Allow-Origin": "*",
+                "Content-Source": "static"
             },
             body: data.toString()
         };
