@@ -2,6 +2,7 @@ import { APIInterface } from './API.mjs';
 import { LambdaSimulatorAPI } from './LambdaSimulatorAPI.mjs';
 import { localServer } from './localServer.mjs';
 import { ResponseJSON } from './response.mjs';
+import { localCLI } from './localCLI.mjs';
 
 class API extends APIInterface {
     constructor() {
@@ -31,4 +32,6 @@ class V1 extends APIInterface {
 }
 
 console.log ("starting local server...");
-const server = await localServer(new API());    // do not remove the 'server' variable, it is needed to keep the server running
+const api = new API();
+const server = await localServer(api);    // do not remove the 'server' variable, it is needed to keep the server running
+await localCLI(api);

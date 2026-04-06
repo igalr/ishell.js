@@ -90,6 +90,34 @@ export class APIInterface {
         return schema;
     }
 
+    // Walk the schema along path and return the declared HTTP method of the terminal node.
+    // Intermediate nodes whose action returns another APIInterface are traversed transparently.
+    // Defaults to 'get' if the path cannot be resolved or no method is declared.
+    async resolveMethod(path) {
+        if (!Array.isArray(path)) path = [path];
+        path = [...path];
+        let currentSchema = this.#schema;
+        let method = 'get';
+        for (let i = 0; i < path.length; i++) {
+            const node = currentSchema[path[i]];
+            if (!node) return method;
+            if (node.method) method = node.method;
+            if (i < path.length - 1 && node.action) {
+                try {
+                    const next = await node.action({}, null, {});
+                    if (next?.isAPIInterface) {
+                        currentSchema = next.schema;
+                    } else {
+                        return method;
+                    }
+                } catch {
+                    return method;
+                }
+            }
+        }
+        return method;
+    }
+
     confirmAPIKey(headers, apiKey) {
         if (apiKey) {
             const provided = headers['x-api-key'];
