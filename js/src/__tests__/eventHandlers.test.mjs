@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { KinesistHandler } from '../handlers/KinesisHandler.js';
-import { S3Handler } from '../handlers/S3Handler.js';
-import { SNSHandler } from '../handlers/SNSHandler.js';
+import { KinesistHandler } from '../../handlers/KinesisHandler.mjs';
+import { S3Handler } from '../../handlers/S3Handler.mjs';
+import { SNSHandler } from '../../handlers/SNSHandler.mjs';
 
 const kinesisInput = {
   Records: [{ eventSource: 'aws:kinesis', data: 'test' }],
@@ -12,6 +12,19 @@ const snsInput = {
     {
       EventSource: 'aws:sns',
       Sns: { Message: JSON.stringify({ event: 'order.placed' }) },
+    },
+  ],
+};
+
+const s3Input = {
+  Records: [
+    {
+      eventSource: 'aws:s3',
+      eventName: 'ObjectCreated:Put',
+      s3: {
+        bucket: { name: 'my-bucket' },
+        object: { key: 'uploads/photo.jpg', size: 4096 },
+      },
     },
   ],
 };
@@ -36,19 +49,6 @@ describe('KinesistHandler', () => {
     expect(h.payload).toEqual(kinesisInput);
   });
 });
-
-const s3Input = {
-  Records: [
-    {
-      eventSource: 'aws:s3',
-      eventName: 'ObjectCreated:Put',
-      s3: {
-        bucket: { name: 'my-bucket' },
-        object: { key: 'uploads/photo.jpg', size: 4096 },
-      },
-    },
-  ],
-};
 
 describe('S3Handler.isS3', () => {
   it('returns true for S3 input', () => {

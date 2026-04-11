@@ -3,7 +3,7 @@ import { InputHandler } from "./inputHandler.mjs";
 
 export class KinesistHandler extends InputHandler {
     static isKinesis(input) {
-        return input.Records[0]?.eventSource === "aws:kinesis";
+        return input?.Records?.[0]?.eventSource === "aws:kinesis";
     }
 
     static identifier = '__kinesis__';

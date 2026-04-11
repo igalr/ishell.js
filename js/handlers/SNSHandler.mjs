@@ -2,7 +2,7 @@ import { InputHandler } from "./inputHandler.mjs";
 
 export class SNSHandler extends InputHandler {
     static isSNS(input) {
-        return input.Records[0]?.EventSource === "aws:sns";
+        return input?.Records?.[0]?.EventSource === "aws:sns";
     }
 
     static identifier = '__sns__';

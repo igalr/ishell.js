@@ -51,7 +51,8 @@ export default class OpenAPI {
         }
 
         for (const [key, value] of Object.entries(node.schema)) {
-            let path = `${root}/${key}`;
+            const rootNorm = root.endsWith('/') ? root.slice(0, -1) : root;
+            let path = `${rootNorm}/${key}`;
             const method = value.method || 'get';
 
             let params = [];
