@@ -44,7 +44,7 @@ export const handleLambdaTrigger = async (input: unknown, target: APIInterface):
       filename = 'index.html';
       contentType = 'text/html';
     }
-    filename = process.cwd() + '/node_modules/ishell.js/swagger/' + filename;
+    filename = process.cwd() + '/node_modules/redleaf-ishell/swagger/' + filename;
     const data = fs.readFileSync(filename);
     console.log('Docs file', filename, data.length);
     return {

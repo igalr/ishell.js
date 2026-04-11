@@ -1,4 +1,4 @@
-# TypeScript Port of ishell.js — Implementation Plan
+# TypeScript Port of redleaf-ishell — Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -57,7 +57,7 @@ Test files: `ts/src/__tests__/<module>.test.ts` — one per source module.
 
 ```json
 {
-  "name": "ishell.js",
+  "name": "redleaf-ishell",
   "version": "1.3.1",
   "type": "module",
   "scripts": {
@@ -2853,7 +2853,7 @@ export const handleLambdaTrigger = async (input: unknown, target: APIInterface):
       filename = 'index.html';
       contentType = 'text/html';
     }
-    filename = process.cwd() + '/node_modules/ishell.js/swagger/' + filename;
+    filename = process.cwd() + '/node_modules/redleaf-ishell/swagger/' + filename;
     const data = fs.readFileSync(filename);
     console.log('Docs file', filename, data.length);
     return {
@@ -3015,7 +3015,7 @@ export const localServer = (target: APIInterface): Promise<http.Server> => {
 
   app.use(
     '/docs',
-    express.static(path.join(process.cwd(), 'node_modules/ishell.js/swagger'))
+    express.static(path.join(process.cwd(), 'node_modules/redleaf-ishell/swagger'))
   );
 
   const serveMethod = async (req: Request, res: ExpressResponse): Promise<void> => {

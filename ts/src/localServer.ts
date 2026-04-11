@@ -17,7 +17,7 @@ export const localServer = (target: APIInterface): Promise<http.Server> => {
 
   app.use(
     '/docs',
-    express.static(path.join(process.cwd(), 'node_modules/ishell.js/swagger'))
+    express.static(path.join(process.cwd(), 'node_modules/redleaf-ishell/swagger'))
   );
 
   const serveMethod = async (req: Request, res: ExpressResponse): Promise<void> => {

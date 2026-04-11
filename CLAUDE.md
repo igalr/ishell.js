@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-`ishell.js` is a Node.js library for building REST APIs that run both locally (Express + interactive CLI) and as AWS Lambda functions. The same `APIInterface` tree serves all runtimes — the library normalizes each event source into a common format and routes it through the same execution path.
+`redleaf-ishell` is a Node.js library for building REST APIs that run both locally (Express + interactive CLI) and as AWS Lambda functions. The same `APIInterface` tree serves all runtimes — the library normalizes each event source into a common format and routes it through the same execution path.
 
 ## Repository Layout
 

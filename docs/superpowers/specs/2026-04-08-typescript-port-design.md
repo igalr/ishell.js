@@ -1,7 +1,7 @@
-# TypeScript Port of ishell.js — Design Spec
+# TypeScript Port of redleaf-ishell — Design Spec
 
 **Date:** 2026-04-08  
-**Project:** `ishell.js` (`br-terminal` branch)  
+**Project:** `redleaf-ishell` (`br-terminal` branch)  
 **Scope:** Port `js/` source to strict, library-grade TypeScript in `ts/`
 
 ---

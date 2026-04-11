@@ -13,7 +13,7 @@ export const localServer = (target) => {
 
     app.use(
         '/docs',
-        express.static(path.join(process.cwd(), 'node_modules/ishell.js/swagger'))
+        express.static(path.join(process.cwd(), 'node_modules/redleaf-ishell/swagger'))
     );
 
     app.get(/.*/, async (req, res) => serveMethod(req, res));
