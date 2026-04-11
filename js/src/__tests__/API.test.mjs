@@ -1,7 +1,7 @@
 import { describe, it, expect, afterEach } from 'vitest';
-import { APIInterface } from '../../API.mjs';
-import { ResponseJSON } from '../../response.mjs';
-import { NotFoundError, AuthError } from '../../errors.mjs';
+import { APIInterface } from '../API.mjs';
+import { ResponseJSON } from '../response.mjs';
+import { NotFoundError, AuthError } from '../errors.mjs';
 
 const makeSimpleAPI = () =>
   new APIInterface({

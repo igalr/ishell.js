@@ -11,7 +11,7 @@ vi.mock('@aws-sdk/credential-providers', () => ({
   fromIni: vi.fn().mockReturnValue({ accessKeyId: 'test', secretAccessKey: 'test' }),
 }));
 
-import { SNSPublisher } from '../../notifications/SNSPublisher.mjs';
+import { SNSPublisher } from '../notifications/SNSPublisher.mjs';
 import { SNSClient, PublishCommand } from '@aws-sdk/client-sns';
 
 describe('SNSPublisher', () => {

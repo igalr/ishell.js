@@ -3,7 +3,8 @@
   "version": "1.3.1",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf dist && tsc",
+    "hide": "rm -rf dist && tsup src/* --format cjs,esm --dts --minify",
     "dev": "nodemon --exec node dist/local.js",
     "start": "node dist/local.js",
     "test": "vitest run",
@@ -24,6 +25,7 @@
     "@types/mime-types": "^2.1.4",
     "@types/node": "^22.0.0",
     "nodemon": "^3.1.11",
+    "tsup": "^8.5.1",
     "typescript": "^5.8.0",
     "vitest": "^3.1.0"
   }

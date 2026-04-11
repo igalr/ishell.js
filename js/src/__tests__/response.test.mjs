@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   ResponseJSON, ResponseText, ResponseHTML, ResponseXML,
   ResponseCSV, ResponseJSON2CSV
-} from '../../response.mjs';
+} from '../response.mjs';
 
 describe('ResponseJSON', () => {
   it('has application/json content type', () => {

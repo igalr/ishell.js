@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { NotificationChannel } from '../../notifications/NotificationChannel.mjs';
+import { NotificationChannel } from '../notifications/NotificationChannel.mjs';
 
 describe('NotificationChannel', () => {
   beforeEach(() => {

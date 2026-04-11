@@ -11,9 +11,9 @@ vi.mock('readline', () => ({
   },
 }));
 
-import { localCLI } from '../../localCLI.mjs';
-import { APIInterface } from '../../API.mjs';
-import { ResponseJSON } from '../../response.mjs';
+import { localCLI } from '../localCLI.mjs';
+import { APIInterface } from '../API.mjs';
+import { ResponseJSON } from '../response.mjs';
 
 const makeAPI = () =>
   new APIInterface({

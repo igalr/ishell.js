@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { LambdaURLHandler } from '../../handlers/lambdaURL.mjs';
-import { ResponseJSON } from '../../response.mjs';
+import { LambdaURLHandler } from '../handlers/lambdaURL.mjs';
+import { ResponseJSON } from '../response.mjs';
 
 const makeInput = (path, method = 'GET', query = {}, body = null) => ({
   requestContext: { http: { method, path } },

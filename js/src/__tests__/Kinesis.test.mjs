@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { KinesisRecords, KinesisRecord } from '../../aws/Kinesis.mjs';
+import { KinesisRecords, KinesisRecord } from '../aws/Kinesis.mjs';
 
 const makeRecord = (data) => ({
   eventSource: 'aws:kinesis',

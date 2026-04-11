@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   BaseError, NotFoundError, MissingValueError, AuthError,
   SystemError, NotAllowedError, BadFormatError, NotImplementedError
-} from '../../errors.mjs';
+} from '../errors.mjs';
 
 describe('BaseError', () => {
   it('is an instance of Error', () => {

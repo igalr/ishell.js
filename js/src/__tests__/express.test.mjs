@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { ExpressURLHandler } from '../../handlers/express.mjs';
-import { ResponseJSON } from '../../response.mjs';
+import { ExpressURLHandler } from '../handlers/express.mjs';
+import { ResponseJSON } from '../response.mjs';
 
 const makeInput = (path, method = 'GET') => ({
   method,

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { KinesistHandler } from '../../handlers/KinesisHandler.mjs';
-import { S3Handler } from '../../handlers/S3Handler.mjs';
-import { SNSHandler } from '../../handlers/SNSHandler.mjs';
+import { KinesistHandler } from '../handlers/KinesisHandler.mjs';
+import { S3Handler } from '../handlers/S3Handler.mjs';
+import { SNSHandler } from '../handlers/SNSHandler.mjs';
 
 const kinesisInput = {
   Records: [{ eventSource: 'aws:kinesis', data: 'test' }],

@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { handlers } from '../../handlers/handlers.mjs';
-import { LambdaURLHandler } from '../../handlers/lambdaURL.mjs';
-import { KinesistHandler } from '../../handlers/KinesisHandler.mjs';
-import { SNSHandler } from '../../handlers/SNSHandler.mjs';
+import { handlers } from '../handlers/handlers.mjs';
+import { LambdaURLHandler } from '../handlers/lambdaURL.mjs';
+import { KinesistHandler } from '../handlers/KinesisHandler.mjs';
+import { SNSHandler } from '../handlers/SNSHandler.mjs';
 
 describe('handlers.matchHandler', () => {
   it('returns LambdaURLHandler for Lambda URL input', () => {

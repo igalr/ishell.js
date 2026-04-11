@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { AmazonConnectHandler } from '../../handlers/amazonConnect.mjs';
-import { ResponseJSON } from '../../response.mjs';
+import { AmazonConnectHandler } from '../handlers/amazonConnect.mjs';
+import { ResponseJSON } from '../response.mjs';
 
 const makeInput = (overrides = {}) => ({
   Name: 'ContactFlowEvent',

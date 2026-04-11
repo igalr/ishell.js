@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { InputHandler } from '../../handlers/inputHandler.mjs';
+import { InputHandler } from '../handlers/inputHandler.mjs';
 
 class TestHandler extends InputHandler {
   constructor() {

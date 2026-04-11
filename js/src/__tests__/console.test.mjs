@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ConsoleHandler } from '../../handlers/console.mjs';
+import { ConsoleHandler } from '../handlers/console.mjs';
 
 describe('ConsoleHandler.parse', () => {
   it('parses plain path segments', () => {

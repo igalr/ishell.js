@@ -1,8 +1,8 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import http from 'http';
-import { localServer } from '../../localServer.mjs';
-import { APIInterface } from '../../API.mjs';
-import { ResponseJSON } from '../../response.mjs';
+import { localServer } from '../localServer.mjs';
+import { APIInterface } from '../API.mjs';
+import { ResponseJSON } from '../response.mjs';
 
 const makeAPI = () =>
   new APIInterface({
