@@ -55,7 +55,7 @@ export const localServer = (target: APIInterface): Promise<http.Server> => {
     } catch (err) {
       const trace = (err as Error).stack?.split('\n').slice(1).map(line => line.trim());
       if (err instanceof BaseError) {
-        return new ResponseJSON({ status: 'error', type: err.name, message: err.message }).errorCode(err.statusCode);
+        return new ResponseJSON(err.toJSON()).errorCode(err.statusCode);
       }
       return new ResponseJSON({ status: 'error', error: (err as Error).message, stack: trace }).errorCode(500);
     }

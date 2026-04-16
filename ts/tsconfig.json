@@ -6,9 +6,9 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
-    "declaration": false,
-    "declarationMap": false,
-    "sourceMap": false,
+    "declaration": true,    // false
+    "declarationMap": true, // false
+    "sourceMap": true,      // false
     "esModuleInterop": true,
     "skipLibCheck": true
   },
