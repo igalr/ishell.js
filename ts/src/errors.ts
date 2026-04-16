@@ -9,6 +9,8 @@ export class BaseError extends Error {
     super(message);
     this.#name = name;
     this.#statusCode = statusCode;
+
+    console.error(JSON.stringify({ name: this.#name, message: this.message, statusCode: this.#statusCode }));
   }
 }
 

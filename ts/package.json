@@ -2,6 +2,7 @@
   "name": "redleaf-ishell",
   "version": "1.0.3",
   "type": "module",
+  "main": "./dist/index.js",
   "scripts": {
     "build": "rm -rf dist && tsc",
     "hide": "rm -rf dist && tsup && cp -r swagger/ dist/ && node pre-publish.js",
@@ -28,6 +29,6 @@
     "nodemon": "^3.1.11",
     "tsup": "^8.5.1",
     "typescript": "^5.8.0",
-    "vitest": "^3.1.0"
+    "vitest": "^4.1.4"
   }
 }
