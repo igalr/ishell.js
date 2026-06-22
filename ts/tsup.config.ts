@@ -6,11 +6,13 @@ export default defineConfig([
     format: ['cjs', 'esm'],
     dts: false,
     minify: false,  // true
+    splitting: false,
   },
   {
     entry: ['src/local.ts', 'src/localCLI.ts'],
     format: ['esm'],
     dts: false,
     minify: false,  // true
+    splitting: false,
   },
 ])
