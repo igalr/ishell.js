@@ -120,5 +120,15 @@ export const handleLambdaTrigger = async (
         JSON.stringify({ error: msg, code: 500 }) ||
         "Internal Application Error",
     };
+  } finally {
+    if (lambdaInvocationEndHook) {
+      lambdaInvocationEndHook();
+    }
   }
+};
+
+let lambdaInvocationEndHook: (() => void) | null = null;
+
+export const setLambdaInvocationEndHook = (hook: () => void) => {
+  lambdaInvocationEndHook = hook;
 };
