@@ -1,8 +1,12 @@
 {
   "name": "redleaf-ishell",
-  "version": "1.0.10",
+  "version": "1.0.13",
   "type": "module",
-  "main": "./dist/index.js",
+  "types": "./dist/exports.d.ts",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/exports.js",
   "scripts": {
     "build": "rm -rf dist && tsc",
     "hide": "rm -rf dist && tsup && cp -r swagger/ dist/ && node pre-publish.js",
