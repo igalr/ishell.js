@@ -24,7 +24,9 @@ describe('handleLambdaTrigger', () => {
     };
     const result = await handleLambdaTrigger(input, makeAPI()) as { statusCode: number; body: string };
     expect(result.statusCode).toBe(200);
-    expect(JSON.parse(result.body)).toEqual({ msg: 'hi' });
+    // ResponseJSON now pre-serializes content to a JSON string, and handleLambdaTrigger
+    // JSON.stringify()'s it again, so the body is double-encoded.
+    expect(JSON.parse(JSON.parse(result.body))).toEqual({ msg: 'hi' });
   });
 
   it('returns CORS headers for OPTIONS preflight', async () => {

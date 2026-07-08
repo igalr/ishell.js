@@ -1,4 +1,4 @@
-import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
+import { PublishCommand, PublishResponse, SNSClient } from '@aws-sdk/client-sns';
 import { fromIni } from '@aws-sdk/credential-providers';
 
 export class SNSPublisher {
@@ -21,7 +21,7 @@ export class SNSPublisher {
     this.#client = new SNSClient(config);
   }
 
-  async publish(message: unknown): Promise<unknown> {
+  async publish(message: object): Promise<PublishResponse> {
     const command = new PublishCommand({
       TopicArn: this.#topic,
       Message: JSON.stringify(message),

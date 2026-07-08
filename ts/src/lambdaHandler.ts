@@ -4,11 +4,18 @@ import { APIInterface } from "./API.js";
 import fs from "fs";
 import mime from "mime-types";
 import { InputHandler } from "./handlers/inputHandler.js";
+import { Response } from "./response.js";
+
+export interface LambdaResponse {
+  statusCode: number;
+  headers?: Record<string, string>;
+  body?: string;
+}
 
 export const handleLambdaTrigger = async (
-  input: unknown,
+  input: any,
   target: APIInterface,
-): Promise<unknown> => {
+): Promise<LambdaResponse> => {
   let handler: InputHandler;
   try {
     handler = handlers.matchHandler(input);
@@ -32,7 +39,7 @@ export const handleLambdaTrigger = async (
         reqHeaders["access-control-request-headers"],
     };
     console.log("CORS request service");
-    return { statusCode: 200, headers };
+    return { statusCode: 200, headers } as LambdaResponse;
   }
 
   const path = handler.path as string[];
@@ -65,7 +72,7 @@ export const handleLambdaTrigger = async (
         "Content-Source": "static",
       },
       body: data.toString(),
-    };
+    } as LambdaResponse;
   }
 
   const requestHeaders = { ...handler.headers, _handler_type: handler.type };
@@ -76,14 +83,22 @@ export const handleLambdaTrigger = async (
     } else {
       console.log(handler.shortInputLog(input));
     }
-    const response = await target.execute(
+    let response: Response = await target.execute(
       path,
-      handler.params as Record<string, unknown>,
+      handler.params as Record<string, string | number | boolean>,
       handler.method,
-      handler.payload,
+      handler.payload as object | null,
       requestHeaders,
     );
-    return handler.processResponse(response, headers);
+    response = handler.processResponse(response, headers);
+    return {
+      statusCode: response.returnCode,
+      headers: response.headers,
+      body:
+        response.contentType === "application/json"
+          ? JSON.stringify(response.content)
+          : String(response.content),
+    } as LambdaResponse;
   } catch (err) {
     if (process.env.AWS_LOG_IO !== "true") {
       console.log("INPUT", JSON.stringify(input));
@@ -99,7 +114,7 @@ export const handleLambdaTrigger = async (
     }
 
     const msg = (err as Error).message;
-    const params = handler.params as Record<string, unknown>;
+    const params = handler.params as Record<string, string | number | boolean>;
     const trace =
       params["stacktrace"] !== "false"
         ? (err as Error).stack

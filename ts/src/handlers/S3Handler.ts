@@ -20,16 +20,16 @@ export interface S3EventSummary {
 }
 
 export class S3Handler extends InputHandler {
-  static isS3(input: unknown): boolean {
+  static isS3(input: any): boolean {
     const i = input as { Records?: { eventSource?: string }[] };
     return i?.Records?.[0]?.eventSource === 'aws:s3';
   }
 
   static readonly identifier = '__s3__';
 
-  constructor(input: unknown) {
+  constructor(input: any) {
     super('s3');
-    this._path = S3Handler.identifier as unknown as string[];
+    this._path = [S3Handler.identifier];
     this._method = 'post';
     this._params = {};
     this._payload = S3Handler.distill(input as S3Event);
@@ -45,7 +45,7 @@ export class S3Handler extends InputHandler {
     }));
   }
 
-  shortInputLog(input: unknown): string {
+  shortInputLog(input: any): string {
     const i = input as S3Event;
     const first = i?.Records?.[0];
     const bucket = first?.s3?.bucket?.name ?? '?';

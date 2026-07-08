@@ -1,26 +1,32 @@
-abstract class Response {
-  readonly #content: unknown;
-  readonly #contentType: string;
+export abstract class Response {
+  readonly #content: any;
   #returnCode = 200;
+  #headers: Record<string, string> = {};
 
-  get content(): unknown { return this.#content; }
-  get contentType(): string { return this.#contentType; }
+  get content(): any { return this.#content; }
+  get contentType(): string | null { return this.#headers['Content-Type'] || null; }
   get returnCode(): number { return this.#returnCode; }
+  get headers(): Record<string, string> { return this.#headers; }
 
-  constructor(content: unknown, contentType: string) {
+  constructor(content: any, contentType: string | null) {
     this.#content = content;
-    this.#contentType = contentType;
+    if (contentType) this.#headers['Content-Type'] = contentType;
   }
 
   errorCode(code: number): this {
     this.#returnCode = code;
     return this;
   }
+
+  withHeaders(headers: Record<string, string>): this {
+    this.#headers = headers;
+    return this;
+  }
 }
 
 export class ResponseJSON extends Response {
-  constructor(data: unknown) {
-    super(data, 'application/json');
+  constructor(data: any) {
+    super(data instanceof String ? data : JSON.stringify(data), 'application/json');
   }
 }
 
@@ -31,9 +37,9 @@ export class ResponseCSV extends Response {
 }
 
 export class ResponseJSON2CSV extends Response {
-  static json2CSV(list: unknown[]): string {
+  static json2CSV(list: any[]): string {
     if (!Array.isArray(list) || list.length === 0) return '';
-    const records = list as Record<string, unknown>[];
+    const records = list as Record<string, any>[];
     const csv = [Object.keys(records[0]).join(',')];
     for (const item of records) {
       csv.push(
@@ -53,7 +59,7 @@ export class ResponseJSON2CSV extends Response {
     }
     return csv.join('\n');
   }
-  constructor(data: unknown[]) {
+  constructor(data: any[]) {
     super(ResponseJSON2CSV.json2CSV(data), 'text/csv');
   }
 }
@@ -76,4 +82,15 @@ export class ResponseXML extends Response {
   }
 }
 
-export type { Response };
+export class ResponseCORS extends Response {
+  constructor(headers: Record<string, string>) {
+    super(null, null);
+    super.withHeaders(headers);
+  }
+}
+export class ResponseError extends Response {
+  constructor(errorCode: number, message: string) {
+    super(message, 'text/plain');
+    this.errorCode(errorCode);
+  }
+}

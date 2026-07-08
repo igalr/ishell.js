@@ -143,7 +143,7 @@ export default class OpenAPI {
           name: value.tag || path,
           description: value.description || "",
         });
-        let prms: Record<string, unknown> = {};
+        let prms: Record<string, string | number | boolean> = {};
         if (value.params) {
           for (const [paramName, paramDetails] of Object.entries(
             value.params,

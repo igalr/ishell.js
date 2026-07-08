@@ -51,12 +51,13 @@ describe('LambdaURLHandler', () => {
     const h = new LambdaURLHandler(makeInput('/x', 'POST', {}, 'raw text'));
     expect(h.payload).toBe('raw text');
   });
-  it('processResponse returns Lambda-shaped object', () => {
+  it('processResponse returns the response with merged headers', () => {
     const h = new LambdaURLHandler(makeInput('/x'));
     const resp = new ResponseJSON({ ok: true });
-    const out = h.processResponse(resp) as { statusCode: number; body: string; headers: Record<string, string> };
-    expect(out.statusCode).toBe(200);
-    expect(JSON.parse(out.body)).toEqual({ ok: true });
-    expect(out.headers['Content-Type']).toBe('application/json');
+    const out = h.processResponse(resp);
+    expect(out.returnCode).toBe(200);
+    expect(JSON.parse(out.content)).toEqual({ ok: true });
+    expect(out.contentType).toBe('application/json');
+    expect(out.headers['Access-Control-Allow-Origin']).toBe('*');
   });
 });

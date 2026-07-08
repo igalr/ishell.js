@@ -28,7 +28,7 @@ describe('KinesistHandler.isKinesis', () => {
 describe('KinesistHandler', () => {
   it('sets path to __kinesis__ identifier', () => {
     const h = new KinesistHandler(kinesisInput);
-    expect(h.path).toBe(KinesistHandler.identifier);
+    expect(h.path).toEqual([KinesistHandler.identifier]);
     expect(h.method).toBe('post');
   });
   it('sets payload to the full input', () => {
@@ -65,7 +65,7 @@ describe('S3Handler.isS3', () => {
 describe('S3Handler', () => {
   it('sets path to __s3__ identifier', () => {
     const h = new S3Handler(s3Input);
-    expect(h.path).toBe(S3Handler.identifier);
+    expect(h.path).toEqual([S3Handler.identifier]);
     expect(h.method).toBe('post');
   });
   it('distills S3 records into summaries', () => {
@@ -92,6 +92,6 @@ describe('SNSHandler', () => {
   });
   it('sets path to __sns__ identifier', () => {
     const h = new SNSHandler(snsInput);
-    expect(h.path).toBe(SNSHandler.identifier);
+    expect(h.path).toEqual([SNSHandler.identifier]);
   });
 });

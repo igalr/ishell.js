@@ -1,3 +1,9 @@
+export interface NotificationResult {
+  status: 'sent' | 'not_sent';
+  response?: Response;
+  reason?: string;
+}
+
 export class NotificationChannel {
   readonly #notificationUrl: string | null;
   get url(): string | null { return this.#notificationUrl; }
@@ -6,10 +12,10 @@ export class NotificationChannel {
     this.#notificationUrl = notificationUrl;
   }
 
-  async notify(message: unknown, threadkey: string | null = null): Promise<unknown> {
+  async notify(message: object, threadkey: string | null = null): Promise<NotificationResult> {
     let text: string;
     try { text = JSON.stringify(message); } catch { text = String(message); }
-    const body: Record<string, unknown> = { text };
+    const body: Record<string, any> = { text };
     if (threadkey) body['thread'] = { threadKey: threadkey };
     try {
       const response = await fetch(this.#notificationUrl!, {

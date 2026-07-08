@@ -11,7 +11,7 @@ describe('ConsoleHandler.parse', () => {
   it('parses --key value pairs', () => {
     const { path, params } = ConsoleHandler.parse('v1 --page 2 --limit 10');
     expect(path).toEqual(['v1']);
-    expect(params).toEqual({ page: '2', limit: '10' });
+    expect(params).toEqual({ page: 2, limit: 10 });
   });
   it('parses boolean flag (no value)', () => {
     const { params } = ConsoleHandler.parse('v1 --verbose');

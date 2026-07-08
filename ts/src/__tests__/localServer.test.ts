@@ -42,6 +42,6 @@ describe('localServer', () => {
     server = await localServer(makeAPI()) as http.Server;
     const { status, body } = await get(19877, '/unknown');
     expect(status).toBe(404);
-    expect(JSON.parse(body)).toMatchObject({ status: 'error', type: 'NotFoundError' });
+    expect(JSON.parse(body)).toMatchObject({ type: 'NotFoundError', code: 404 });
   });
 });

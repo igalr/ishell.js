@@ -6,15 +6,15 @@ export abstract class InputHandler {
 
   protected _path: string[] = [];
   protected _method: string = '';
-  protected _params: Record<string, unknown> = {};
-  protected _payload: unknown = null;
+  protected _params: Record<string, string | number | boolean> = {};
+  protected _payload: any = null;
   protected _format: string = 'json';
   protected _headers: Record<string, string> = {};
 
   get path(): string[] { return this._path; }
   get method(): string { return this._method; }
-  get params(): Record<string, unknown> { return this._params; }
-  get payload(): unknown { return this._payload; }
+  get params(): Record<string, string | number | boolean> { return this._params; }
+  get payload(): any { return this._payload; }
   get format(): string { return this._format; }
   get headers(): Record<string, string> { return this._headers; }
 
@@ -22,21 +22,21 @@ export abstract class InputHandler {
     this.#type = type;
   }
 
-  getParam(key: string): unknown {
+  getParam(key: string): string | number | boolean | undefined {
     return this._params[key];
   }
 
-  processResponse(response: Response, headers: Record<string, string> = {}): unknown {
+  processResponse(response: Response, headers: Record<string, string>): Response {
     return response;
   }
 
-  shortInputLog(input: unknown): string {
+  shortInputLog(input: any): string {
     let s = JSON.stringify(input);
     if (s.length > 100) s = s.substring(0, 100) + '...';
     return s;
   }
 
-  get json(): Record<string, unknown> {
+  get json(): Record<string, any> {
     return {
       type: this.#type,
       method: this._method,

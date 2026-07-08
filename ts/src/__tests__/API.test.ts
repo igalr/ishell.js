@@ -20,7 +20,7 @@ describe('APIInterface.execute', () => {
     const api = makeSimpleAPI();
     const r = await api.execute(['hello'], {}, 'GET', null);
     expect(r.contentType).toBe('application/json');
-    expect((r as unknown as { content: unknown }).content).toEqual({ message: 'world' });
+    expect((r as unknown as { content: unknown }).content).toBe(JSON.stringify({ message: 'world' }));
   });
   it('throws NotFoundError for unknown path', async () => {
     await expect(makeSimpleAPI().execute(['missing'], {}, 'GET', null)).rejects.toThrow(NotFoundError);
@@ -28,12 +28,12 @@ describe('APIInterface.execute', () => {
   it('passes body to action', async () => {
     const api = makeSimpleAPI();
     const r = await api.execute(['greet'], {}, 'POST', { name: 'Alice' });
-    expect((r as unknown as { content: unknown }).content).toEqual({ echo: { name: 'Alice' } });
+    expect((r as unknown as { content: unknown }).content).toBe(JSON.stringify({ echo: { name: 'Alice' } }));
   });
   it('accepts string path (non-array)', async () => {
     const api = makeSimpleAPI();
     const r = await api.execute('hello', {}, 'GET', null);
-    expect((r as unknown as { content: unknown }).content).toEqual({ message: 'world' });
+    expect((r as unknown as { content: unknown }).content).toBe(JSON.stringify({ message: 'world' }));
   });
 });
 
@@ -42,7 +42,7 @@ describe('APIInterface.addHandler', () => {
     const api = makeSimpleAPI();
     api.addHandler('added', async () => new ResponseJSON({ added: true }));
     const r = await api.execute(['added'], {}, 'POST', null);
-    expect((r as unknown as { content: unknown }).content).toEqual({ added: true });
+    expect((r as unknown as { content: unknown }).content).toBe(JSON.stringify({ added: true }));
   });
 });
 

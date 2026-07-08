@@ -1,23 +1,23 @@
 import { InputHandler } from './inputHandler.js';
-import type { Response } from '../response.js';
+import { ResponseJSON, type Response } from '../response.js';
 
 export class LambdaURLHandler extends InputHandler {
-  static isLambdaURL(input: unknown): boolean {
-    const i = input as Record<string, unknown>;
+  static isLambdaURL(input: any): boolean {
+    const i = input as Record<string, any>;
     if (!i?.requestContext) return false;
-    const ctx = i.requestContext as Record<string, unknown>;
+    const ctx = i.requestContext as Record<string, any> | undefined;
     if (!ctx?.http) return false;
-    const http = ctx.http as Record<string, unknown>;
+    const http = ctx.http as Record<string, any>;
     if (!http?.method) return false;
     if (!http?.path) return false;
     return true;
   }
 
-  constructor(input: Record<string, unknown>) {
+  constructor(input: Record<string, any>) {
     super('lambda_url');
-    const ctx = input.requestContext as Record<string, Record<string, unknown>>;
+    const ctx = input.requestContext as Record<string, Record<string, any>>;
     this._method = ctx.http.method as string;
-    this._params = (input.queryStringParameters as Record<string, unknown>) || {};
+    this._params = (input.queryStringParameters as Record<string, string | number | boolean>) || {};
 
     this._payload = input.body;
     try {
@@ -39,9 +39,9 @@ export class LambdaURLHandler extends InputHandler {
     this._headers = (input.headers as Record<string, string>) || {};
   }
 
-  shortInputLog(input: unknown): string {
-    const i = input as Record<string, unknown>;
-    const ctx = i.requestContext as Record<string, Record<string, unknown>> | undefined;
+  shortInputLog(input: any): string {
+    const i = input as Record<string, any>;
+    const ctx = i.requestContext as Record<string, Record<string, any>> | undefined;
     return JSON.stringify({
       path: ctx?.http?.path,
       method: ctx?.http?.method,
@@ -50,20 +50,12 @@ export class LambdaURLHandler extends InputHandler {
     });
   }
 
-  processResponse(response: Response, headers: Record<string, string> = {}): unknown {
+  processResponse(response: Response, headers: Record<string, string> = {}): Response {
     const outHeaders: Record<string, string> = {
       ...headers,
-      'Content-Type': response.contentType,
+      ...response.headers,
       'Access-Control-Allow-Origin': '*',
     };
-    const body =
-      response.contentType === 'application/json'
-        ? JSON.stringify(response.content)
-        : String(response.content);
-    return {
-      statusCode: response.returnCode,
-      headers: outHeaders,
-      body,
-    };
+    return response.withHeaders(outHeaders);
   }
 }

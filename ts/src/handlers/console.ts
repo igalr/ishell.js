@@ -1,35 +1,51 @@
-import { InputHandler } from './inputHandler.js';
-import type { Response } from '../response.js';
+import { InputHandler } from "./inputHandler.js";
+import type { Response } from "../response.js";
 
 export class ConsoleHandler extends InputHandler {
-  constructor(path: string[], params: Record<string, unknown>, method: string, body: unknown) {
-    super('console');
+  constructor(
+    path: string[],
+    params: Record<string, string | number | boolean>,
+    method: string,
+    body: any,
+  ) {
+    super("console");
     this._path = path;
     this._params = params;
     this._method = method;
     this._payload = body;
-    this._headers = { _handler_type: 'console' };
+    this._headers = { _handler_type: "console" };
   }
 
-  static parse(line: string): { path: string[]; params: Record<string, unknown>; body: unknown } {
+  static parse(line: string): {
+    path: string[];
+    params: Record<string, string | number | boolean>;
+    body: any;
+  } {
     const tokens = ConsoleHandler.#tokenize(line.trim());
     const path: string[] = [];
-    const params: Record<string, unknown> = {};
-    let body: unknown = null;
+    const params: Record<string, string | number | boolean> = {};
+    let body: any = null;
 
     let i = 0;
     // Leading non-flag tokens are the path
-    while (i < tokens.length && !tokens[i].startsWith('--')) {
+    while (i < tokens.length && !tokens[i].startsWith("--")) {
       path.push(tokens[i]);
       i++;
     }
 
     // Parse --key value pairs; a non-flag token encountered mid-parse is the body
     while (i < tokens.length) {
-      if (tokens[i].startsWith('--')) {
+      if (tokens[i].startsWith("--")) {
         const key = tokens[i].slice(2);
-        if (i + 1 < tokens.length && !tokens[i + 1].startsWith('--')) {
-          params[key] = tokens[i + 1];
+        if (i + 1 < tokens.length && !tokens[i + 1].startsWith("--")) {
+          const value = tokens[i + 1];
+          if (!isNaN(Number(value))) {
+            params[key] = Number(value);
+          } else if (value === "true" || value === "false") {
+            params[key] = value === "true";
+          } else {
+            params[key] = value;
+          }
           i += 2;
         } else {
           params[key] = true;
@@ -37,7 +53,7 @@ export class ConsoleHandler extends InputHandler {
         }
       } else {
         // Non-flag token: remaining tokens form the body
-        const raw = tokens.slice(i).join(' ');
+        const raw = tokens.slice(i).join(" ");
         try {
           body = JSON.parse(raw);
         } catch {
@@ -52,7 +68,7 @@ export class ConsoleHandler extends InputHandler {
 
   static #tokenize(line: string): string[] {
     const tokens: string[] = [];
-    let current = '';
+    let current = "";
     let inSingle = false;
     let inDouble = false;
 
@@ -61,10 +77,10 @@ export class ConsoleHandler extends InputHandler {
         inSingle = !inSingle;
       } else if (c === '"' && !inSingle) {
         inDouble = !inDouble;
-      } else if (c === ' ' && !inSingle && !inDouble) {
+      } else if (c === " " && !inSingle && !inDouble) {
         if (current) {
           tokens.push(current);
-          current = '';
+          current = "";
         }
       } else {
         current += c;
@@ -74,12 +90,13 @@ export class ConsoleHandler extends InputHandler {
     return tokens;
   }
 
-  processResponse(response: Response): void {
+  processResponse(response: Response): Response {
     const content = response.content;
-    if (response.contentType?.startsWith('application/json')) {
-      process.stdout.write(JSON.stringify(content, null, 2) + '\n');
+    if (response.contentType?.startsWith("application/json")) {
+      process.stdout.write(JSON.stringify(content, null, 2) + "\n");
     } else {
-      process.stdout.write(String(content) + '\n');
+      process.stdout.write(String(content) + "\n");
     }
+    return response;
   }
 }

@@ -7,7 +7,7 @@ export interface ParamDefinition {
   in?: 'query' | 'path' | 'header';
   type?: string;
   required?: boolean;
-  default?: unknown;
+  default?: string | number | boolean;
   description?: string;
 }
 
@@ -24,8 +24,8 @@ export interface SchemaNode {
   body?: object;
   responses?: Record<string, { description: string }>;
   action: (
-    params: Record<string, unknown>,
-    body: unknown,
+    params: Record<string, string | number | boolean>,
+    body: object | null,
     headers: Record<string, string>
   ) => ActionResult;
 }
@@ -49,9 +49,9 @@ export class APIInterface {
 
   async execute(
     path: string | string[],
-    params: Record<string, unknown>,
+    params: Record<string, string | number | boolean>,
     methods: string,
-    body: unknown,
+    body: object | null,
     headers: Record<string, string> = {}
   ): Promise<Response> {
     if (!Array.isArray(path)) path = [path];
@@ -65,9 +65,9 @@ export class APIInterface {
 
   async exrec(
     path: string[],
-    params: Record<string, unknown>,
+    params: Record<string, string | number | boolean>,
     _methods: string,
-    body: unknown,
+    body: object | null,
     headers: Record<string, string> = {}
   ): Promise<Response | APIInterface> {
     let currentAPI: APIInterface = this;

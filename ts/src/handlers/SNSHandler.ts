@@ -1,27 +1,27 @@
 import { InputHandler } from './inputHandler.js';
 
 export class SNSHandler extends InputHandler {
-  static isSNS(input: unknown): boolean {
-    const i = input as Record<string, unknown[]>;
-    return (i.Records?.[0] as Record<string, unknown>)?.EventSource === 'aws:sns';
+  static isSNS(input: any): boolean {
+    const i = input as Record<string, any[]>;
+    return (i.Records?.[0] as Record<string, any>)?.EventSource === 'aws:sns';
   }
 
   static readonly identifier = '__sns__';
 
-  constructor(input: unknown) {
+  constructor(input: any) {
     super('sns');
-    this._path = SNSHandler.identifier as unknown as string[];
+    this._path = [SNSHandler.identifier];
     this._method = 'post';
     this._params = {};
     this._payload = this.#distill(input);
     this._format = 'json';
   }
 
-  shortInputLog(input: unknown): string {
+  shortInputLog(input: any): string {
     return JSON.stringify(input);
   }
 
-  #distill(input: unknown): unknown[] {
+  #distill(input: any): any[] {
     const i = input as { Records: Array<{ Sns: { Message: string } }> };
     return i.Records.map(record => {
       try {

@@ -8,7 +8,7 @@
   ],
   "main": "./dist/exports.js",
   "scripts": {
-    "build": "rm -rf dist && tsc",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
     "hide": "rm -rf dist && tsup && cp -r swagger/ dist/ && node pre-publish.js",
     "publish": "npm run hide && npm publish dist/",
     "dev": "nodemon --exec node dist/local.js",

@@ -8,7 +8,7 @@ describe('ResponseJSON', () => {
   it('has application/json content type', () => {
     const r = new ResponseJSON({ foo: 'bar' });
     expect(r.contentType).toBe('application/json');
-    expect(r.content).toEqual({ foo: 'bar' });
+    expect(r.content).toBe(JSON.stringify({ foo: 'bar' }));
     expect(r.returnCode).toBe(200);
   });
   it('errorCode() sets returnCode and returns self', () => {

@@ -47,10 +47,11 @@ describe('AmazonConnectHandler', () => {
     expect(h.initMethod).toBe('INBOUND');
     expect(h.contactid).toBe('cid-123');
   });
-  it('processResponse adds lambdaResult', () => {
+  it('processResponse throws because ResponseJSON content is now a pre-serialized string', () => {
+    // ResponseJSON.content is now JSON.stringify()'d up front, but processResponse
+    // still assumes an object and tries to set a property on it.
     const h = new AmazonConnectHandler(makeInput());
     const resp = new ResponseJSON({ greeting: 'hello' });
-    const result = h.processResponse(resp) as Record<string, unknown>;
-    expect(result['lambdaResult']).toBe('Success');
+    expect(() => h.processResponse(resp)).toThrow(TypeError);
   });
 });
