@@ -1,0 +1,11 @@
+# to store
+store.sh
+.env
+.env-local-dev
+.env.appname-dev
+
+# to ignore
+**/dist/
+**/node_modules
+**/package-lock.json
+.vscode
