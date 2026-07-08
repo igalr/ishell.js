@@ -94,10 +94,11 @@ export const handleLambdaTrigger = async (
     return {
       statusCode: response.returnCode,
       headers: response.headers,
-      body:
-        response.contentType === "application/json"
-          ? JSON.stringify(response.content)
-          : String(response.content),
+      body: response.content
+      // ,body:
+      //   response.contentType === "application/json"
+      //     ? JSON.stringify(response.content)
+      //     : String(response.content),
     } as LambdaResponse;
   } catch (err) {
     if (process.env.AWS_LOG_IO !== "true") {
