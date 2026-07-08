@@ -38,8 +38,10 @@ export const localServer = (target: APIInterface): Promise<http.Server> => {
       req.headers as Record<string, string>,
       req.body as string,
     );
+    if (response.contentType !== null) {
+      res.type(response.contentType);
+    }
     res
-      .type(response.contentType)
       .status(response.returnCode)
       .send(response.content);
   };
@@ -49,14 +51,14 @@ export const localServer = (target: APIInterface): Promise<http.Server> => {
     params: Record<string, string | number | boolean>,
     method: string,
     headers: Record<string, string>,
-    body: string | null = null,
+    body: any = null,
   ): Promise<Response> => {
     const enrichedHeaders = { ...headers, _handler_type: "express" };
     try {
       if (body !== null) {
         let payload: object;
         try {
-          payload = JSON.parse(body);
+          payload = body instanceof Object? body: JSON.parse(body);
         } catch (e) {
           console.error("Invalid JSON body:", body);
           throw e;

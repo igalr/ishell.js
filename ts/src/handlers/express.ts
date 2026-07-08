@@ -45,16 +45,19 @@ export class ExpressURLHandler extends InputHandler {
     this._headers = (input.headers as Record<string, string>) || {};
   }
 
-  processResponse(response: Response, headers: Record<string, string> = {}): ExpressResponse {
-    headers['Content-Type'] = response.contentType;
-    const body =
-      response.contentType === 'application/json'
-        ? JSON.stringify(response.content)
-        : response.content;
-    return {
-      statusCode: response.returnCode,
-      headers,
-      body,
-    } as ExpressResponse;
-  }
+  // processResponse(response: Response, headers: Record<string, string> = {}): Response {
+  //   if (response.contentType !== null) {
+  //     headers['Content-Type'] = response.contentType;
+  //   }
+  //   const body =
+  //     response.contentType === 'application/json'
+  //       ? JSON.stringify(response.content)
+  //       : response.content;
+  //   return response;
+  //   // return {
+  //   //   statusCode: response.returnCode,
+  //   //   headers,
+  //   //   body,
+  //   // } as Response;
+  // }
 }
