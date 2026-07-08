@@ -34,6 +34,30 @@ npm install redleaf-ishell
 
 The package ships dual CJS and ESM builds. It works with Node.js 18+ and runs in both local development and AWS Lambda environments.
 
+## Quick skeleton project creation
+Creating a skeleton project that is used as a starting point is a breeze.
+Copy the following Shell script to a terminal in a directory of your choice
+
+```bash
+echo "Enter the name of the new project: "
+read dirname
+
+mkdir tmp
+cd tmp
+wget https://raw.githubusercontent.com/igalr/ishell.js/refs/heads/master/skeleton/skeleton.zip
+unzip skeleton.zip
+
+echo "Press <CTRL+C> to stop demo execution...."
+trap ':' INT
+./init.sh "$dirname"
+trap - INT
+
+mv "$dirname" ../
+cd ..
+rm -rf tmp
+```
+The script will create a minimal codebase and run it locally. Press CTRL-C to stop the run and complete the installation
+
 ---
 
 ## Core Concepts
